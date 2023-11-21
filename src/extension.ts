@@ -16,21 +16,25 @@ export function activate(context: vscode.ExtensionContext) {
       chat.activateChat();
     }
   );
+  //Create a button in the status bar
+  let statusBarItem = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Right
+  );
+
+  statusBarItem.text = "$(comment) Chat";
+  statusBarItem.tooltip = "Chat";
+  statusBarItem.command = "extension.triggerChat";
+  statusBarItem.show();
+
   context.subscriptions.push(disposable);
-  // Create a button in the status bar
-  // let statusBarItem = vscode.window.createStatusBarItem(
-  //   vscode.StatusBarAlignment.Left,
-  //   100
-  // );
-  // statusBarItem.text = "$(comment) Chat";
-  // statusBarItem.tooltip = "Chat";
-  // statusBarItem.command = "extension.triggerChat";
   // statusBarItem.color = new vscode.ThemeColor(
   //   "statusBarItem.prominentForeground"
   // );
 
   // // Show the status bar item
-  // statusBarItem.show();
 
   //  context.subscriptions.push(disposable);
 }
+
+// this method is called when your extension is deactivated
+export function deactivate() {}
