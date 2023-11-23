@@ -3,17 +3,49 @@ import * as vscode from "vscode";
 
 import { ChatSystem } from "./Chat";
 
-// Initialize the chat system
 export function activate(context: vscode.ExtensionContext) {
   const chat = new ChatSystem();
 
-  // Register a command to trigger the chat
-  const disposable = vscode.commands.registerCommand(
+  const chatDisposable = vscode.commands.registerCommand(
     "extension.triggerChat",
     () => {
       vscode.window.showInformationMessage("Chat Extension activated!");
-
       chat.activateChat();
+    }
+  );
+
+  context.subscriptions.push(chatDisposable);
+
+  // DropdownButton code
+  let dropdownStatusBarItem = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Left,
+    100
+  );
+
+  dropdownStatusBarItem.text = "Dropdown Button";
+  dropdownStatusBarItem.show();
+
+  dropdownStatusBarItem.command = "dropdownButton.showQuickPick";
+
+  let dropdownDisposable = vscode.commands.registerCommand(
+    "dropdownButton.showQuickPick",
+    () => {
+      let options = ["Botpress", "Chat", "STS"];
+      let optionsQuickPick = vscode.window.createQuickPick();
+      optionsQuickPick.items = options.map((option) => ({ label: option }));
+      optionsQuickPick.onDidChangeSelection((selection) => {
+        if (selection[0]) {
+          const selectedOption = selection[0].label;
+          vscode.window.showInformationMessage(selectedOption);
+
+          // Check if the selected option is "Chat" and activate the chat window
+          if (selectedOption === "Chat") {
+            chat.activateChat();
+          }
+        }
+        optionsQuickPick.hide();
+      });
+      optionsQuickPick.show();
     }
   );
   //Create a button in the status bar
@@ -21,20 +53,18 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.StatusBarAlignment.Right
   );
 
-  statusBarItem.text = "$(comment) Chat";
-  statusBarItem.tooltip = "Chat";
-  statusBarItem.command = "extension.triggerChat";
+  statusBarItem.text = "$(comment) Select";
+  statusBarItem.tooltip = "Select option from above";
+  statusBarItem.command = "dropdownButton.showQuickPick";
   statusBarItem.show();
 
-  context.subscriptions.push(disposable);
-  // statusBarItem.color = new vscode.ThemeColor(
-  //   "statusBarItem.prominentForeground"
-  // );
-
-  // // Show the status bar item
-
-  //  context.subscriptions.push(disposable);
+  context.subscriptions.push(dropdownDisposable);
 }
 
 // this method is called when your extension is deactivated
 export function deactivate() {}
+
+// {
+//   "command": "extension.triggerChat",
+//   "title": "Chat"
+// },

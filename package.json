@@ -14,22 +14,22 @@
   "contributes": {
     "commands": [
       {
-        "command": "extension.triggerChat",
-        "title": "Chat"
+        "command": "dropdownButton.showQuickPick",
+        "title": "Show Quick Pick"
       }
     ],
     "menus": {
       "editor/context": [
         {
           "when": "editorHasSelection",
-          "command": "extension.triggerChat",
+          "command": "dropdownButton.showQuickPick",
           "group": "navigation"
         }
       ],
       "editor/title": [
         {
           "when": "editorHasSelection",
-          "command": "extension.triggerChat"
+          "command": "dropdownButton.showQuickPick"
         }
       ]
     }
